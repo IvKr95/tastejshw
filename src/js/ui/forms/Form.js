@@ -6,8 +6,8 @@ class Form {
             this.element = element;
         }
 
-        this.registerEvents();
         this.submit = this.submit.bind(this)
+        this.registerEvents();
     }
 
     registerEvents() {
@@ -23,17 +23,22 @@ class Form {
     }
 
     getData() {
-        console.log('works')
-        const formData = new FormData(this.element)
-        return formData;
+        const formData = new FormData(this.element);
+        let formObj = {};
+
+        for (const pair of formData.entries()) {
+            formObj[pair[0]] = pair[1];
+        };
+        
+        return formObj;
     }
 
     onSubmit() {}
 
     submit(event) {
         event.preventDefault();
-        console.log(this.getData)
+
         const data = this.getData();
-        // this.onSubmit(data);
+        this.onSubmit(data);
     }
 }

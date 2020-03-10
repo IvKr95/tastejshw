@@ -4,6 +4,8 @@ class SearchForm extends Form {
     }
 
     onSubmit(data) {
-        console.log(data)
+        Entity.get(data, (result) => {
+            console.log(result)
+        })
     }
 }

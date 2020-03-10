@@ -1,6 +1,19 @@
-const createRequset = (options = {}) => {
-    fetch(options.url, options.body)
-    .then((res) => res.json())
+const createRequest = (options = {}) => {
+    const searchParams = new URLSearchParams(options.params);
+
+    fetch(options.url + '?' + searchParams, {
+        method: options.method,
+        body: options.body
+    })
+    .then(result => result.json())
     .then(data => console.log(data))
-    .catch(error => console.log(error))
+    .catch(error => options.callback(error))
+}
+
+const handleResolved = () => {
+
+}
+
+const handleReject = () => {
+
 }
