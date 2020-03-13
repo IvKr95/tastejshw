@@ -3,11 +3,11 @@ class Form {
         if (element === undefined) {
             console.log('Form Not Defined')
         } else {
-            this.element = element;
+            this.element = element
         }
 
         this.submit = this.submit.bind(this)
-        this.registerEvents();
+        this.registerEvents()
     }
 
     registerEvents() {
@@ -15,19 +15,15 @@ class Form {
     }
 
     unregisterEvents() {
-        
-    }
-
-    clear() {
-
+        this.element.removeEventListener("submit", this.submit)
     }
 
     getData() {
-        const formData = new FormData(this.element);
-        let formObj = {};
+        const formData = new FormData(this.element)
+        let formObj = {}
 
         for (const pair of formData.entries()) {
-            formObj[pair[0]] = pair[1];
+            formObj[pair[0]] = pair[1]
         };
         
         return formObj;
@@ -36,9 +32,9 @@ class Form {
     onSubmit() {}
 
     submit(event) {
-        event.preventDefault();
+        event.preventDefault()
 
-        const data = this.getData();
-        this.onSubmit(data);
+        const data = this.getData()
+        this.onSubmit(data)
     }
 }

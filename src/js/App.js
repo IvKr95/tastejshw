@@ -7,7 +7,6 @@ class App {
     }
 
     static initForms() {
-        console.log(document.querySelector('.search-form'))
         this.forms = {
             searchForm: new SearchForm(document.querySelector('.search-form')),
         }
@@ -23,15 +22,35 @@ class App {
     }
 
     static getPage(pageName) {
-        return this.pages[pageName];
+        return this.pages[pageName]
     }
 
     static getForm(formName) {
-        return this.forms[formName];
+        return this.forms[formName]
     }
 
-    static showPage(pageName) {
-        const page = this.getPage(pageName);
-        page.render();
+    static showPage(pageName, data = {}) {
+        const page = this.getPage(pageName)
+        page.render(data)
+        this.setCurrentPage(pageName)
+    }
+
+    static setCurrentPage(name) {
+        this.currentPage = name
+    }
+
+    static update() {
+        this.updatePages()
+        this.updateForms()
+    }
+
+    static updatePages() {
+        for (const page in this.pages) {
+            this.pages[page].update()
+        }
+    }
+
+    static updateForms() {
+        this.getForm('searchForm').update()
     }
 }

@@ -1,19 +1,25 @@
-const createRequest = (options = {}) => {
-    const searchParams = new URLSearchParams(options.params);
+const createRequest = ({url, params, method, callback}) => {
+    const searchParams = new URLSearchParams(params)
+    const urlWithParams = url + '?' + searchParams;
+    const proxiedUrl = getProxiedUrl(urlWithParams)
 
-    fetch(options.url + '?' + searchParams, {
-        method: options.method,
-        body: options.body
+    fetch(proxiedUrl, {
+        method,
     })
-    .then(result => result.json())
-    .then(data => console.log(data))
-    .catch(error => options.callback(error))
+    .then(response => {
+        if (response.status !== 200) {
+            callback(null, response)
+            return
+        }
+
+        return response.json()
+    })
+    .then(data => callback(data, null))
+    .catch(error => callback(null, error))
 }
 
-const handleResolved = () => {
-
+const getProxiedUrl = (rowUrl) => {
+    return PROXY_URL + rowUrl;
 }
 
-const handleReject = () => {
-
-}
+const PROXY_URL = "http://localhost:5000/";
