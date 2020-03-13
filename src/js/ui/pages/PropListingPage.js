@@ -10,11 +10,11 @@ class PropListingPage {
     }
 
     registerEvents() {
-        this.element.addEventListener('click', this.handleClick)
+        document.body.addEventListener('click', this.handleClick)
     }
 
     unregisterEvents() {
-        this.element.removeEventListener('click', this.handleClick)
+        document.body.removeEventListener('click', this.handleClick)
     }
 
     handleClick(event) {
@@ -24,6 +24,14 @@ class PropListingPage {
         } else if (event.target.classList.contains('delete-fav')) {
             Favorites.removeFav(this.listing.lister_url)
             this.update()
+        } else if (event.target.classList.contains('main-page')) {
+            this.unmount()
+            App.showPage('propSearchPage')
+        } else if (event.target.classList.contains('fav-btn')) {
+
+            this.unmount()
+            App.showPage('favPage')
+
         }
     }
 
@@ -58,11 +66,9 @@ class PropListingPage {
 
         const state = this.checkIfFavourite()
 
-        return `<header>
+        return `<main class="main">
                     <h1>Property Details</h1>
                     <button class="${state ? 'delete-fav' : 'add-fav'} btn">${state ? '&#128151;' : '&#43;'}</button>
-                </header>
-                <main class="main">
                     <h1>${price_formatted}</h1>
                     <h2>${title}</h2>
                     <img src="${img_url}" alt="${title}" width="${img_width}" height="${img_height}">

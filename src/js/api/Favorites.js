@@ -29,11 +29,13 @@ class Favorites {
         const favs = this.getFavs()
         let result = false;
 
-        for (const fav of favs) {
-            if (fav.lister_url === url) {
-                result = true;
-                break;
-            }
+        if (favs) {
+            for (const fav of favs) {
+                if (fav.lister_url === url) {
+                    result = true;
+                    break;
+                }
+            }    
         }
 
         return result;

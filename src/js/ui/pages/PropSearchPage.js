@@ -12,11 +12,11 @@ class PropSearchPage {
     }
 
     registerEvents() {
-        this.element.addEventListener('click', this.handleClick)
+        document.body.addEventListener('click', this.handleClick)
     }
 
     unregisterEvents() {
-        this.element.removeEventListener('click', this.handleClick);
+        document.body.removeEventListener('click', this.handleClick);
     }
 
     handleClick(event) {
@@ -139,35 +139,27 @@ class PropSearchPage {
     }
 
     renderMainLayout() {
-        const html = `<header>
-                            <h1>PropertyCross</h1>
-                            <div>
-                                <button class="fav-btn btn">Faves</button>
-                            </div>
-                        </header>
-                        <main class="main">
-                            <section class="upper-part">
-                                <div class="container">
-                                    <p class="description">
-                                        Use the form below to search for houses to buy. 
-                                        You can search by place-name, postcode, 
-                                        or click 'My location', to search in your current location!
-                                    </p>
-                                </div>
-                                <div class="container">
-                                    <form class="search-form">
-                                        <input class="search-form__field" type="search" name="place_name">
-                                        <button class="search-form__go go-btn" type="submit">Go</button>
-                                    </form>
-                                    <button class="loc-btn" type="submit">My location</button>
-                                </div>
-                            </section>
-                            <section class="lower-part">
-                                <h2 class="lower-part__title"></h2>
-                                <div class="lower-part__box">
-                                </div>
-                            </section>
-                        </main>`;
+        const html = `<section class="upper-part">
+                        <div class="container">
+                            <p class="description">
+                                Use the form below to search for houses to buy. 
+                                You can search by place-name, postcode, 
+                                or click 'My location', to search in your current location!
+                            </p>
+                        </div>
+                        <div class="container">
+                            <form class="search-form">
+                                <input class="search-form__field" type="search" name="place_name">
+                                <button class="search-form__go go-btn" type="submit">Go</button>
+                            </form>
+                            <button class="loc-btn" type="submit">My location</button>
+                        </div>
+                    </section>
+                    <section class="lower-part">
+                        <h2 class="lower-part__title"></h2>
+                        <div class="lower-part__box">
+                        </div>
+                    </section>`;
 
         this.element.insertAdjacentHTML("afterbegin", html);
     }

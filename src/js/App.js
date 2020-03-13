@@ -1,6 +1,6 @@
 class App {
     static init() {
-        this.content = document.querySelector(".app")
+        this.content = document.querySelector(".content")
         this.initPages()
         this.showPage('propSearchPage')
         this.initForms()

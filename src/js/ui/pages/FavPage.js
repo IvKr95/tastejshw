@@ -5,29 +5,40 @@ class FavPage {
         } else {
             this.element = element;
         }
+
         this.unmount = this.unmount.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
 
     registerEvents() {
-        this.element.addEventListener('click', this.handleClick)
+        document.body.addEventListener('click', this.handleClick)
     }
 
     unregisterEvents() {
-
+        document.body.removeEventListener('click', this.handleClick)
     }
 
     handleClick(event) {
         if (event.target.classList.contains('listing')) {
             this.unmount()
             App.showPage('propListingPage', event.target.dataset.about)
+        } else if (event.target.classList.contains('main-page')) {
+            this.unmount()
+            App.showPage('propSearchPage')
         }
     }
 
     render() {
-        this.renderMainLayout()
-        this.renderListings(Favorites.getFavs())
-        this.registerEvents()
+        const favourites = Favorites.getFavs()
+
+        if (!favourites || favourites.length === 0) {
+            this.renderTitle()
+            this.registerEvents()
+        } else {
+            this.renderMainLayout()
+            this.renderListings(favourites)
+            this.registerEvents()
+        }
     }
 
     update() {
@@ -40,11 +51,9 @@ class FavPage {
     }
 
     renderMainLayout() {
-        const html = `<header>
-                            <h1>Favourites</h1>
-                        </header>
-                        <main class="main">
-                        </main>`;
+        const html = `<main class="main">
+                        <h1>Favourites</h1>
+                    </main>`;
 
         this.element.insertAdjacentHTML("afterbegin", html);
     }
@@ -66,7 +75,7 @@ class FavPage {
 
     renderListings(listings) {
         const html = this.getListingsHTML(listings)
-        this.element.querySelector('.main').append(html)
+        this.element.append(html)
     }
 
     getListingsHTML(listings) {
@@ -79,5 +88,9 @@ class FavPage {
         })
 
         return ul;
+    }
+
+    renderTitle() {
+        this.element.insertAdjacentHTML('afterbegin', '<h1>You have not added any properties to your favourites</h1>')
     }
 }

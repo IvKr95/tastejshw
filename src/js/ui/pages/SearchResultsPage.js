@@ -11,7 +11,7 @@ class SearchResultsPage {
     }
 
     registerEvents() {
-        this.element.addEventListener('click', this.handleClick)
+        document.body.addEventListener('click', this.handleClick)
     }
 
     handleClick(event) {
@@ -21,15 +21,24 @@ class SearchResultsPage {
         } else if (event.target.classList.contains('main-page')) {
             this.unmount()
             App.showPage('propSearchPage')
-        }
+        } else if (event.target.classList.contains('fav-btn')) {
+            this.unmount()
+            App.showPage('favPage')
+        } else if (event.target.classList.contains('load-more')) {
+            Entity.get({"place_name": this.location, page: this.page + 1}, (result, error) => {
+                this.updateListings(result.data, CurrentListings.getCurrentListings())
+            })
+        } 
     }
 
     unregisterEvents() {
-        this.element.removeEventListener('click', this.handleClick)
+        document.body.removeEventListener('click', this.handleClick)
     }
 
     render(data = {}) {
-        this.renderMainLayout()
+        this.page = data.page;
+        this.location = data.locations[0].place_name;
+
         this.renderTitle(data.listings.length, data.total_results)
         this.renderListings(data.listings)
 
@@ -42,21 +51,22 @@ class SearchResultsPage {
     unmount() {
         this.element.innerHTML = '';
         this.unregisterEvents()
+        CurrentListings.removeCurrentListings()
     }
 
     update(data = []) {
-        this.render(data);
+        this.element.innerHTML = '';
+        this.render(data)
     }
 
-    renderMainLayout() {
-        const html = `<header>
-                            <h1 class="main-page">PropertyCross</h1>
-                            <h2 class="title"></h2>
-                        </header>
-                        <main class="main">
-                        </main>`;
+    updateListings(data, listings) {
+        this.element.innerHTML = '';
+        this.renderTitle(listings.length, data.total_results)
+        this.renderListings(listings)
 
-        this.element.insertAdjacentHTML("afterbegin", html);
+        if (data.total_results > listings.length) {
+            this.renderLoadMoreBtn()
+        }
     }
 
     getListingHTML(listing) {
@@ -75,7 +85,7 @@ class SearchResultsPage {
     }
 
     renderListings(listings) {
-        this.element.querySelector('.main').append(this.getListingsHTML(listings))
+        this.element.append(this.getListingsHTML(listings))
     }
 
     getListingsHTML(listings) {
@@ -91,7 +101,10 @@ class SearchResultsPage {
 
     renderTitle(part, total) {
         //The page title should indicate be of the form "x of y matches"
-        this.element.querySelector('.title').textContent = this.formatTitle(part, total)
+        this.element.insertAdjacentHTML(
+            'afterbegin', 
+            `<h2>${this.formatTitle(part, total)}</h2>`
+        )
     }
 
     formatTitle(x, y) {
@@ -100,11 +113,11 @@ class SearchResultsPage {
 
     renderLoadMoreBtn() {
         const html = this.getLoadMoreBtnHTML()
-        this.element.querySelector('.main').insertAdjacentHTML('beforeend', html)
+        this.element.insertAdjacentHTML('beforeend', html)
     }
 
     getLoadMoreBtnHTML() {
-        return `<button class="load-more-btn">Load more</button>
+        return `<button class="load-more">Load more</button>
                 <p>Results for #search_term#, showing x of y properties</p>`;
     }
 }

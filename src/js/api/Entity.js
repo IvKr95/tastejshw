@@ -17,15 +17,17 @@ class Entity {
                         //the query returned a list of properties
                         if (result.response.listings.length >= 1) {
 
-                            callback({
-                                ambiguous: false,
-                                data: result.response,
-                            }, null)
-
                             RecentSearches.setNewSearch({
                                 name: result.request.location,
                                 props: result.response.total_results,
                             })
+
+                            CurrentListings.setCurrentListings(result.response.listings)
+
+                            callback({
+                                ambiguous: false,
+                                data: result.response,
+                            }, null)
 
                         } else {
                             callback(null, 'Zero properties returned')
@@ -50,7 +52,7 @@ class Entity {
 Entity.HOST = "https://api.nestoria.co.uk";
 Entity.URL = "/api";
 Entity.configParams = {
-    "pretty": 1,
-    "action": "search_listings",
-    "encoding": "json",
+    pretty: 1,
+    action: "search_listings",
+    encoding: "json",
 };
