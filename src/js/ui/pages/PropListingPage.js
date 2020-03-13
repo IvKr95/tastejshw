@@ -20,6 +20,10 @@ class PropListingPage {
     handleClick(event) {
         if (event.target.classList.contains('add-fav')) {
             Favorites.setNewFav(this.listing)
+            this.update()
+        } else if (event.target.classList.contains('delete-fav')) {
+            Favorites.removeFav(this.listing.lister_url)
+            this.update()
         }
     }
 
@@ -31,6 +35,16 @@ class PropListingPage {
     render(data = '') {
         this.listing = JSON.parse(data)
 
+        this.renderListing()
+        this.registerEvents()
+    }
+
+    renderListing() {
+        const html = this.getListingHTML()
+        this.element.insertAdjacentHTML("afterbegin", html)
+    }
+
+    getListingHTML() {
         const {
             price_formatted, 
             title, 
@@ -39,31 +53,33 @@ class PropListingPage {
             img_url, 
             bedroom_number, 
             bathroom_number, 
-            summary
+            summary,
         } = this.listing
 
-        const html = `<header>
-                            <h1>Property Details</h1>
-                            <button class="add-fav btn">+</button>
-                        </header>
-                        <main class="main">
-                            <h1>${price_formatted}</h1>
-                            <h2>${title}</h2>
-                            <img src="${img_url}" alt="${title}" width="${img_width}" height="${img_height}">
-                            <span>${bedroom_number} bed</span>
-                            <span>,</span>
-                            <span>${!bathroom_number ? 'no' : bathroom_number} bathrooms</span>
-                            <p>${summary}</p>
-                        </main>`;
+        const state = this.checkIfFavourite()
 
-        this.element.insertAdjacentHTML("afterbegin", html)
-        this.registerEvents()
+        return `<header>
+                    <h1>Property Details</h1>
+                    <button class="${state ? 'delete-fav' : 'add-fav'} btn">${state ? '&#128151;' : '&#43;'}</button>
+                </header>
+                <main class="main">
+                    <h1>${price_formatted}</h1>
+                    <h2>${title}</h2>
+                    <img src="${img_url}" alt="${title}" width="${img_width}" height="${img_height}">
+                    <span>${bedroom_number} bed</span>
+                    <span>,</span>
+                    <span>${!bathroom_number ? 'no' : bathroom_number} bathrooms</span>
+                    <p>${summary}</p>
+                </main>`;
     }
 
-    update(data = []) {
-        this.render(data)
+    checkIfFavourite() {
+        const {lister_url} = this.listing
+        return Favorites.getFav(lister_url)
     }
 
-    renderTitle() {
+    update() {
+        this.element.innerHTML = '';
+        this.renderListing()
     }
 }

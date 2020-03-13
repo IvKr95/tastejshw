@@ -11,12 +11,32 @@ class Favorites {
         } 
     }
 
-    static removeFav(key) {
-        localStorage.removeItem(key)
+    static removeFav(url) {
+        const favs = this.getFavs()
+        const newFavs = favs.filter(fav => fav.lister_url !== url)
+        this.updateFavs(newFavs)
+    }
+
+    static updateFavs(newFavs) {
+        localStorage.setItem(this.FAVORITES, JSON.stringify(newFavs))
     }
 
     static getFavs() {
         return JSON.parse(localStorage.getItem(this.FAVORITES))
+    }
+
+    static getFav(url) {
+        const favs = this.getFavs()
+        let result = false;
+
+        for (const fav of favs) {
+            if (fav.lister_url === url) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 
     static emptyFavs() {

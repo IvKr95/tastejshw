@@ -14,7 +14,7 @@ class SearchForm extends Form {
 
             if (result && error === null) {
                 if (!result.ambiguous) {
-                    App.getPage('propSearchPage').clear()
+                    App.getPage('propSearchPage').unmount()
                     App.showPage('searchResultsPage', result.data)
                 } else if (result.ambiguous) {
                     App

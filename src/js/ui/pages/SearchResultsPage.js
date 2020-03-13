@@ -16,9 +16,11 @@ class SearchResultsPage {
 
     handleClick(event) {
         if (event.target.classList.contains('listing')) {
-            console.log('fds')
             this.unmount()
             App.showPage('propListingPage', event.target.dataset.about)
+        } else if (event.target.classList.contains('main-page')) {
+            this.unmount()
+            App.showPage('propSearchPage')
         }
     }
 
@@ -48,7 +50,8 @@ class SearchResultsPage {
 
     renderMainLayout() {
         const html = `<header>
-                            <h1 class="title"></h1>
+                            <h1 class="main-page">PropertyCross</h1>
+                            <h2 class="title"></h2>
                         </header>
                         <main class="main">
                         </main>`;

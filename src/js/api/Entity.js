@@ -45,10 +45,6 @@ class Entity {
             }
         })
     }
-
-    static list() {
-        return createRequest({})
-    }
 }
 
 Entity.HOST = "https://api.nestoria.co.uk";
